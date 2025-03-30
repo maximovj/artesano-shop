@@ -18,6 +18,6 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
-        "vuetify": "3.8.0-beta.0"
+        "@mdi/font": "^7.4.47"
     }
 }
