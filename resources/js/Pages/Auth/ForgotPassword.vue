@@ -1,10 +1,10 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import { Head, useForm } from "@inertiajs/vue3";
 
 defineProps({
     status: {
@@ -13,49 +13,55 @@ defineProps({
 });
 
 const form = useForm({
-    email: '',
+    email: "",
 });
 
 const submit = () => {
-    form.post(route('password.email'));
+    form.post(route("password.email"));
 };
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout :show-breadcrumbs="false" :show-center="true">
         <Head title="Forgot Password" />
 
-        <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset
-            link that will allow you to choose a new one.
-        </div>
+        
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
+        <v-card variant="flat" class="p-4 mx-auto" border="dashed md" rounded="lg" min-width="360" max-width="480">
+            <v-card-title primary-title> Recuperar contraseña </v-card-title>
+            <v-card-text>
+                <v-row v-if="status" no-gutters class="mb-2">
+                    <v-alert closable :text="status" type="success" variant="tonal"></v-alert>
+                </v-row>
+                <v-row class="mb-2 mt-2" no-gutters>
+                    <v-col cols="12">
+                    ¿Olvidaste tu contraseña? No hay problema. Solo indícanos tu
+                    dirección de correo electrónico y te enviaremos un enlace para
+                    restablecer tu contraseña, que te permitirá elegir una nueva.
+                    </v-col>
+                </v-row>
+                <form @submit.prevent="submit">
+                    <v-container>
+                        <v-row no-gutters>
+                            <v-col cols="12">
+                                <v-text-field
+                                    v-model="form.email"
+                                    label="Correo electrónico"
+                                    :error-messages="form.errors.email"
+                                />
+                            </v-col>
+                        </v-row>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
-                </PrimaryButton>
-            </div>
-        </form>
+                        <v-row no-gutters>
+                            <v-col cols="12" class="text-right">
+                                <v-btn type="submit" color="teal"
+                                    >Recuperar cuenta</v-btn
+                                >
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </form>
+            </v-card-text>
+        </v-card>
     </GuestLayout>
 </template>

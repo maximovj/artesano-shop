@@ -1,5 +1,7 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { ref, computed, defineProps } from "vue";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 defineProps({
     canLogin: {
@@ -17,50 +19,62 @@ defineProps({
         required: true,
     },
 });
+
+const appName = usePage().props.app.name;
 </script>
 
 <template>
-    <Head title="Welcome" />
+    <Head title="Home" />
+    <v-app>
+        <v-layout class="rounded rounded-md border">
+            <v-app-bar>
+                <template v-slot:prepend>
+                    <!-- Logo -->
+                    <div class="shrink-0 flex items-center">
+                        <Link :href="'/'">
+                            <ApplicationLogo
+                                class="block h-9 w-auto fill-current text-gray-800"
+                            />
+                        </Link>
+                    </div>
+                </template>
+                <Link :href="'/'" class="ml-5">
+                    <v-app-bar-title>{{ appName }}</v-app-bar-title>
+                </Link>
+                <v-spacer></v-spacer>
+                <Link :href="route('login')" method="get">
+                    <v-btn text>Iniciar sesión</v-btn>
+                </Link>
+                <Link :href="route('register')" method="get">
+                    <v-btn text>Crear cuenta</v-btn>
+                </Link>
+            </v-app-bar>
 
-    <div
-        class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white"
-    >
-        <div v-if="canLogin" class="sm:fixed sm:top-0 sm:right-0 p-6 text-end">
-            <Link
-                v-if="$page.props.auth.user"
-                :href="route('dashboard')"
-                class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                >Dashboard</Link
-            >
+            <v-navigation-drawer>
+                <v-list nav>
+                    <v-list-item title="Drawer left" link></v-list-item>
+                </v-list>
+            </v-navigation-drawer>
 
-            <template v-else>
-                <Link
-                    :href="route('login')"
-                    class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                    >Log in</Link
-                >
+            <v-navigation-drawer location="right">
+                <v-list nav>
+                    <v-list-item title="Drawer right" link></v-list-item>
+                </v-list>
+            </v-navigation-drawer>
 
-                <Link
-                    v-if="canRegister"
-                    :href="route('register')"
-                    class="ms-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                    >Register</Link
-                >
-            </template>
-        </div>
-
-        <div class="max-w-7xl mx-auto p-6 lg:p-8">
-            <v-card
-            title="Bienvenido"
-            subtitle="ArtesanoShop"
-            text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores animi placeat magnam delectus dolor perferendis, consectetur quo autem quasi tempore repudiandae error deleniti! Doloribus rem aliquam, in soluta similique perferendis."
-            >
-            <v-card-actions>
-                <v-btn>Click me</v-btn>
-            </v-card-actions>
-            </v-card>
-        </div>
-    </div>
+            <v-main>
+                <v-container fluid>
+                    <v-sheet
+                        border="dashed md"
+                        color="surface-light"
+                        height="200"
+                        rounded="lg"
+                        width="100%"
+                    ></v-sheet>
+                </v-container>
+            </v-main>
+        </v-layout>
+    </v-app>
 </template>
 
 <style>

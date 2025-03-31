@@ -1,11 +1,7 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref, computed, defineProps } from "vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 
 defineProps({
     canResetPassword: {
@@ -17,78 +13,94 @@ defineProps({
 });
 
 const form = useForm({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     remember: false,
 });
 
 const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+    form.post(route("login"), {
+        onFinish: () => form.reset("password"),
     });
+};
+
+// Función para limpiar los campos
+const clear = () => {
+    form.email = "";
+    form.password = "";
+    form.remember = false;
 };
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
+    <GuestLayout :show-breadcrumbs="false" :show-center="true">
+        <Head title="Iniciar sesión" />
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
+        <v-card
+            variant="flat"
+            class="p-4 mx-auto"
+            border="dashed md"
+            rounded="lg"
+            min-width="360"
+            max-width="480"
+        >
+            <v-card-title>Iniciar sesión</v-card-title>
+            <v-card-text>
+                <v-row v-if="status" no-gutters class="mb-2">
+                    <v-alert closable :text="status" type="success" variant="tonal"></v-alert>
+                </v-row>
+                <form @submit.prevent="submit">
+                    <v-container>
+                        <v-row no-gutters>
+                            <v-col cols="12">
+                                <!-- Campo Nombre -->
+                                <v-text-field
+                                    v-model="form.email"
+                                    :counter="10"
+                                    label="Correo electrónico"
+                                    :error-messages="form.errors.email"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
+                        <v-row no-gutters >
+                            <v-col cols="12">
+                                <!-- Campo Correo Electrónico -->
+                                <v-text-field
+                                    v-model="form.password"
+                                    label="Contraseña"
+                                    :error-messages="form.errors.password"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+                        <v-row no-gutters>
+                            <v-col cols="12">
+                                <!-- Campo Checkbox -->
+                                <v-checkbox
+                                    v-model="form.remember"
+                                    label="Recuérdeme"
+                                ></v-checkbox>
+                            </v-col>
+                        </v-row>
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
+                        <v-row no-gutters> 
+                            <v-row justify="end">
+                                <!-- Acciones -->
+                                <Link :href="route('password.request')">
+                                    <v-btn variant="plain">
+                                        ¿Olvidaste tu contraseña?
+                                    </v-btn>
+                                </Link>
+                                <!-- Botón de Limpiar -->
+                                <v-btn type="submit" class="me-4" color="teal"
+                                    >Entrar</v-btn
+                                >
+                            </v-row>
+                        </v-row>
+                    </v-container>
+                </form>
+            </v-card-text>
+        </v-card>
     </GuestLayout>
 </template>

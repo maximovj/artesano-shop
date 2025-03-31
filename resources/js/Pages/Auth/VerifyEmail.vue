@@ -1,8 +1,8 @@
 <script setup>
-import { computed } from 'vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { computed } from "vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     status: {
@@ -13,39 +13,55 @@ const props = defineProps({
 const form = useForm({});
 
 const submit = () => {
-    form.post(route('verification.send'));
+    form.post(route("verification.send"));
 };
 
-const verificationLinkSent = computed(() => props.status === 'verification-link-sent');
+const verificationLinkSent = computed(
+    () => props.status === "verification-link-sent"
+);
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Email Verification" />
+    <GuestLayout :show-breadcrumbs="false" :show-center="true" :show-app-bar="false">
+        <Head title="Verificar cuenta" />
 
-        <div class="mb-4 text-sm text-gray-600">
-            Thanks for signing up! Before getting started, could you verify your email address by clicking on the link
-            we just emailed to you? If you didn't receive the email, we will gladly send you another.
-        </div>
-
-        <div class="mb-4 font-medium text-sm text-green-600" v-if="verificationLinkSent">
-            A new verification link has been sent to the email address you provided during registration.
-        </div>
-
-        <form @submit.prevent="submit">
-            <div class="mt-4 flex items-center justify-between">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Resend Verification Email
-                </PrimaryButton>
-
-                <Link
-                    :href="route('logout')"
-                    method="post"
-                    as="button"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >Log Out</Link
-                >
-            </div>
-        </form>
+        <v-card
+            variant="flat"
+            class="p-4 mx-auto"
+            border="dashed md"
+            rounded="lg"
+            min-width="360"
+            max-width="480"
+        >
+            <v-card-title primary-title> Verificar cuenta </v-card-title>
+            <v-card-text>
+                <v-row no-gutters>
+                    <v-col cols="12">
+                        ¡Gracias por registrarte! Antes de comenzar, ¿podrías verificar tu dirección de correo electrónico haciendo clic en el enlace que te acabamos de enviar? Si no recibiste el correo, con gusto te enviaremos otro.
+                    </v-col>
+                </v-row>
+                <v-row v-if="verificationLinkSent" no-gutters class="m-2">
+                    <v-alert closable type="success" variant="tonal">
+                        <v-alert-text>
+                            Se ha enviado un nuevo enlace de verificación a la dirección de correo electrónico que proporcionaste durante el registro.
+                        </v-alert-text>
+                    </v-alert>
+                </v-row>
+                <form @submit.prevent="submit">
+                    <v-container class="mt-2">
+                        <v-row justify="end">
+                            <v-btn type="submit" color="teal" class="me-2">
+                                Verificar mi cuenta
+                            </v-btn>
+                            <Link :href="route('logout')" method="post">
+                                <v-btn color="red" class="me-2">
+                                    Cerrar sesión
+                                </v-btn>
+                            </Link>
+                        </v-row>
+                    </v-container>
+                </form>
+            </v-card-text>
+        </v-card>
     </GuestLayout>
 </template>

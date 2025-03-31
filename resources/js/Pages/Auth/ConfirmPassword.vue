@@ -18,33 +18,46 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout :show-app-bar="false" :show-breadcrumbs="false" :show-center="true">
         <Head title="Confirm Password" />
 
-        <div class="mb-4 text-sm text-gray-600">
-            This is a secure area of the application. Please confirm your password before continuing.
-        </div>
+        <v-card>
+            <v-card-title primary-title>
+                Confirmar contraseña
+            </v-card-title>
+            <v-card-text>
+                <v-row no-gutters>
+                    <div>
+                        Esta es un área segura de la aplicación. Por favor, confirma tu contraseña antes de continuar
+                    </div>
+                </v-row>
+                <form @submit.prevent="submit">
+                    <v-container>
+                        <!-- Campo Contraseña -->
+                        <v-row no-gutters class="mb-2">
+                            <v-col cols="12">
+                                <v-text-field
+                                    v-model="form.password"
+                                    type="password"
+                                    id="password"
+                                    label="Contraseña"
+                                    :error-messages="form.errors.password"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                    autofocus
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="flex justify-end mt-4">
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Confirm
-                </PrimaryButton>
-            </div>
-        </form>
+                        <v-row no-gutters>
+                            <v-col cols="12">
+                                <v-btn 
+                                    type="submit" 
+                                    :active="form.processing"
+                                    active-color="grey-darken-3" 
+                                    color="teal">Confirmar</v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </form>
+            </v-card-text>
+        </v-card>
     </GuestLayout>
 </template>

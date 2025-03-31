@@ -1,103 +1,103 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+    form.post(route("register"), {
+        onFinish: () => form.reset("password", "password_confirmation"),
     });
 };
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout :show-breadcrumbs="false" :show-center="true">
         <Head title="Register" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
+        <v-card
+            variant="flat"
+            class="p-4 mx-auto"
+            border="dashed md"
+            rounded="lg"
+            min-width="360"
+            max-width="480"
+        >
+            <v-card-title> Crear cuenta </v-card-title>
+            <v-card-text>
+                <form @submit.prevent="submit">
+                    <v-container>
+                        <v-row no-gutters>
+                            <v-col cols="12">
+                                <!-- Campo nombre -->
+                                <v-text-field
+                                    v-model="form.name"
+                                    label="Nombre"
+                                    :error-messages="form.errors.name"
+                                />
+                            </v-col>
+                        </v-row>
 
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
+                        <v-row no-gutters>
+                            <v-col cols="12">
+                                <!-- Campo Correo electrónico -->
+                                <v-text-field
+                                    v-model="form.email"
+                                    label="Correo electrónico"
+                                    :error-messages="form.errors.email"
+                                />
+                            </v-col>
+                        </v-row>
 
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
+                        <v-row no-gutters>
+                            <v-col cols="12">
+                                <!-- Campo Contraseña -->
+                                <v-text-field
+                                    v-model="form.password"
+                                    label="Contraseña"
+                                    :error-messages="form.errors.password"
+                                />
+                            </v-col>
+                        </v-row>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                        <v-row no-gutters>
+                            <v-col cols="12">
+                                <!-- Campo Confirmar contraseña -->
+                                <v-text-field
+                                    v-model="form.password_confirmation"
+                                    label="Confirmar contraseña"
+                                    :error-messages="
+                                        form.errors.password_confirmation
+                                    "
+                                />
+                            </v-col>
+                        </v-row>
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
+                        <v-spacer></v-spacer>
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    :href="route('login')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
+                        <!-- Acciones -->
+                        <v-row justify="end">
+                            <Link :href="route('login')">
+                                <v-btn variant="plain"
+                                    >¿Ya tienes una cuenta? Inicia sesión</v-btn
+                                >
+                            </Link>
+                            <v-btn type="submit" color="teal"
+                                >Registrarme</v-btn
+                            >
+                        </v-row>
+                    </v-container>
+                </form>
+            </v-card-text>
+        </v-card>
     </GuestLayout>
 </template>
